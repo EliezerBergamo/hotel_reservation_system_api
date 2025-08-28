@@ -11,6 +11,9 @@ db.sqlite3
 # Sensitive environment variables file
 .env
 
+# Git Ignore file
+.gitignore
+
 # PyCharm-specific files
 .idea/
 
