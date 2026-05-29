@@ -33,6 +33,7 @@ class Reservation(BaseModel):
 
     class Meta:
         db_table = 'reservations'
+        ordering = ['-date_creation']
 
     def __str__(self):
         return f"Reservation: {self.id} - {self.user.name}|{self.start_date} - {self.end_date}"
