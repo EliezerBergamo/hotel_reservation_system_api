@@ -1,7 +1,14 @@
+"""
+Core Abstract Models and Mixins.
+"""
+
 import uuid
 from django.db import models
 
 class BaseModel(models.Model):
+    """
+    Abstract base model providing UUID primary keys and automated timestamp tracking.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date_creation = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)

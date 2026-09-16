@@ -1,8 +1,16 @@
+"""
+Database Models for the Reservations App.
+"""
+
 from django.db import models
 from apps.core.models import BaseModel
+from apps.core.fields import EncryptedTextField
 
 
 class Reservation(BaseModel):
+    """
+    Represents a hotel room reservation record including payment status and encrypted details.
+    """
     user = models.ForeignKey(
         'accounts.User',
         on_delete=models.CASCADE,
@@ -29,8 +37,7 @@ class Reservation(BaseModel):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     payment_method = models.CharField(max_length=50, blank=True, null=True)
     payment_status = models.CharField(max_length=50, default='pending')
-    payment_details = models.CharField(blank=True, null=True, max_length=500)
-
+    payment_details = EncryptedTextField(blank=True, null=True)
     class Meta:
         db_table = 'reservations'
         ordering = ['-date_creation']

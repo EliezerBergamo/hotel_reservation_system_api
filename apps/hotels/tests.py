@@ -1,3 +1,7 @@
+"""
+Unit and Integration Tests for Hotels API Endpoints.
+"""
+
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework import status
@@ -6,8 +10,13 @@ from .models import Hotel
 import uuid
 
 class HotelTests(APITestCase):
-
+    """
+    Test suite verifying CRUD operations, permission checks, search, and filtering on Hotels API.
+    """
     def setUp(self):
+        """
+        Setup test user with manager role and retrieve list endpoint URL.
+        """
         user = get_user_model()
         self.user = user.objects.create_user(
             email='admin@test.com',
@@ -19,6 +28,9 @@ class HotelTests(APITestCase):
         self.list_url = reverse('hotels:hotel-list')
 
     def test_list_hotels(self):
+        """
+        Verify retrieving a list of all existing hotels.
+        """
         Hotel.objects.create(
             name="Hotel A",
             address="St A",
@@ -37,6 +49,9 @@ class HotelTests(APITestCase):
         self.assertEqual(len(response.data['results']), 2)
 
     def test_post_hotel(self):
+        """
+        Verify an authenticated manager can create a new hotel.
+        """
         self.client.force_authenticate(user=self.user)
         data = {
             'name': 'Hotel C',
@@ -54,6 +69,9 @@ class HotelTests(APITestCase):
         self.assertEqual(response.data['name'], "Hotel C")
 
     def test_patch_hotel(self):
+        """
+        Verify an authenticated manager can partially update a hotel record.
+        """
         hotel = Hotel.objects.create(
             name="Hotel D",
             address="St D",
@@ -71,6 +89,9 @@ class HotelTests(APITestCase):
         self.assertEqual(hotel.name, 'Edited')
 
     def test_delete_hotel(self):
+        """
+        Verify an authenticated manager can delete a hotel record.
+        """
         hotel = Hotel.objects.create(
             name="Hotel E",
             address="St E",
@@ -85,6 +106,9 @@ class HotelTests(APITestCase):
         self.assertEqual(Hotel.objects.count(), 0)
 
     def test_without_login(self):
+        """
+        Verify unauthenticated users cannot perform POST operations.
+        """
         data = {
             'name': 'Hotel F',
             'address': 'St F',
@@ -95,6 +119,9 @@ class HotelTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_hotel_not_found(self):
+        """
+        Verify retrieving a non-existent hotel returns HTTP 404.
+        """
         self.client.force_authenticate(user=self.user)
 
         url = reverse('hotels:hotel-detail', kwargs={'pk': uuid.uuid4()})
@@ -103,6 +130,9 @@ class HotelTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_post_hotel_bad_request(self):
+        """
+        Verify POST request with missing required payload fields fails with HTTP 400.
+        """
         data = {
             'address': 'St G',
             'city': 'City G'
@@ -117,6 +147,9 @@ class HotelTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_search_hotel_by_city(self):
+        """
+        Verify filtering hotels list query parameter by exact city match.
+        """
         Hotel.objects.create(name="Hotel G", address="St G", city="City G")
         Hotel.objects.create(name="Hotel H", address="St H", city="City H")
 
@@ -129,6 +162,9 @@ class HotelTests(APITestCase):
         self.assertEqual(response.data['results'][0]['city'], 'City H')
 
     def test_search_hotel_by_name(self):
+        """
+        Verify search parameter matching hotel names.
+        """
         Hotel.objects.create(name="Hotel I", address="St I", city="City I")
         Hotel.objects.create(name="Hotel J", address="St J", city="City J")
 
@@ -140,6 +176,9 @@ class HotelTests(APITestCase):
         self.assertIn("Hotel I", response.data['results'][0]['name'])
 
     def test_search_hotel_by_address(self):
+        """
+        Verify search parameter matching hotel addresses.
+        """
         Hotel.objects.create(name="Hotel K", address="St K", city="City K")
         Hotel.objects.create(name="Hotel L", address="St L", city="City L")
 
@@ -151,11 +190,17 @@ class HotelTests(APITestCase):
         self.assertIn("K", response.data['results'][0]['address'])
 
     def test_search_no_results(self):
+        """
+        Verify searching for non-matching strings returns empty result set.
+        """
         url = self.list_url + '?search=non-existent'
         response = self.client.get(url)
         self.assertEqual(len(response.data['results']), 0)
 
     def test_order_hotels_by_name(self):
+        """
+        Verify ordering query parameter sorts result list by hotel name.
+        """
         Hotel.objects.create(name="Hotel M", address="St M", city="City M")
 
         url = self.list_url + '?ordering=name'

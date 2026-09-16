@@ -1,8 +1,14 @@
+"""
+Database Models for the Rooms App.
+"""
+
 from django.db import models
 from apps.core.models import BaseModel
 
 class Room(BaseModel):
-
+    """
+    Represents a hotel room record with attributes for pricing, capacity, and room identification.
+    """
     hotel = models.ForeignKey(
         'hotels.Hotel',
         on_delete=models.CASCADE,

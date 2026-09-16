@@ -1,3 +1,7 @@
+"""
+API Views, Filtering, and Search Endpoint Configurations for Rooms App.
+"""
+
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters as drf_filters
 from .models import Room
@@ -5,6 +9,9 @@ from .serializers import RoomSerializer
 from .filters import RoomFilter
 
 class RoomViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet handling CRUD operations, field filtering, text searches, and ordering for rooms.
+    """
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
 

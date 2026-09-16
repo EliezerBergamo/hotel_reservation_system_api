@@ -1,8 +1,16 @@
+"""
+Database models for the Accounts application.
+"""
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from apps.core.models import BaseModel
 
 class User(AbstractUser, BaseModel):
+    """
+    Custom User model extending Django's AbstractUser and core BaseModel.
+    Supports role-based authorization and multi-tenant hotel assignment.
+    """
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)

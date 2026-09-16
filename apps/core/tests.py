@@ -1,3 +1,7 @@
+"""
+Unit and Integration Test Suite for Core Components.
+"""
+
 import uuid
 import time
 from django.test import TestCase
@@ -12,7 +16,13 @@ from apps.reservations.models import Reservation
 from unittest.mock import patch
 
 class BaseModelTest(TestCase):
+    """
+    Tests for BaseModel inheritance and automatic timestamp management.
+    """
     def test_metadata_fields_automation(self):
+        """
+        Verify automatic creation of date_creation and date_update fields.
+        """
         hotel = Hotel.objects.create(
             name="Base Test Hotel",
             address="Av Core, 0",
@@ -23,6 +33,9 @@ class BaseModelTest(TestCase):
         self.assertIsNotNone(hotel.date_update)
 
     def test_metadata_fields_update(self):
+        """
+        Verify date_update field updates correctly on object state changes.
+        """
         hotel = Hotel.objects.create(
             name="Update Hotel",
             address="St Core, 1",
@@ -41,7 +54,13 @@ class BaseModelTest(TestCase):
         self.assertGreater(hotel.date_update, original_update)
 
 class IdempotencyMiddlewareTests(APITestCase):
+    """
+    Tests validating API idempotency behavior using header checking and Redis cache.
+    """
     def setUp(self):
+        """
+        Setup test environment and clear test cache before each execution.
+        """
         cache.clear()
 
         self.user = User.objects.create_user(
@@ -63,6 +82,9 @@ class IdempotencyMiddlewareTests(APITestCase):
         self.url = reverse('reservations:reservation-list')
 
     def test_missing_idempotency_header_returns_400(self):
+        """
+        Verify missing X-Idempotency-key header triggers HTTP 400 Bad Request.
+        """
         self.client.force_authenticate(user=self.user)
         data = {
             'user': self.user.id,
@@ -77,6 +99,9 @@ class IdempotencyMiddlewareTests(APITestCase):
 
     @patch('apps.accounts.tasks.send_welcome_email_task.delay')
     def test_duplicate_request_returns_cached_response(self, mock_celery_task):
+        """
+        Verify duplicate API POST calls return cached responses without re-executing tasks.
+        """
         self.client.force_authenticate(self.user)
 
         unique_key = str(uuid.uuid4())
