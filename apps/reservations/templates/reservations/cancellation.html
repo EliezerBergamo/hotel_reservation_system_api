@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation Cancelled</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #eee;
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 20pt;
+            font-weight: bold;
+            color: #111;
+            letter-spacing: 0.5px;
+        }
+
+        .status {
+            font-size: 13pt;
+            color: #cc0000;
+            margin-top: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .message {
+            font-size: 12pt;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .details-table td {
+            font-size: 11pt;
+            padding: 10px 0;
+            border-bottom: 0.5px solid #eee;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 30%;
+            color: #000;
+        }
+
+        .value {
+            width: 70%;
+            color: #444;
+        }
+
+        .footer-content {
+            border-top: 1px solid #ccc;
+            padding-top: 15px;
+            font-size: 10pt;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="title">RESERVATION CANCELLED</div>
+            <div class="status">Status: {{ reservation.get_status_display }}</div>
+        </div>
+
+        <div class="message">
+            Hello <strong>{{ reservation.user.name|title }}</strong>,<br><br>
+            We are writing to confirm that your reservation has been successfully cancelled.
+            If a refund is applicable based on your booking terms, it will be processed shortly.
+        </div>
+
+        <table class="details-table">
+            <tr>
+                <td class="label">Reservation ID:</td>
+                <td class="value">{{ reservation.id }}</td>
+            </tr>
+            <tr>
+                <td class="label">Room number:</td>
+                <td class="value">{{ reservation.room.room_number }}</td>
+            </tr>
+            <tr>
+                <td class="label">Period:</td>
+                <td class="value">{{ reservation.start_date }} to {{ reservation.end_date }}</td>
+            </tr>
+        </table>
+
+        <div class="footer-content">
+            If you did not request this cancellation or believe this is an error, please contact our support team immediately.
+        </div>
+    </div>
+
+</body>
+</html>

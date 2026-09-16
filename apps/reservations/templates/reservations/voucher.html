@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation Voucher</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 11pt;
+            color: #111111;
+            line-height: 1.5;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #444444;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 22pt;
+            font-weight: bold;
+            color: #111111;
+        }
+
+        .status {
+            font-size: 13pt;
+            color: #111111;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .status strong {
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .details-table td {
+            font-size: 12pt;
+            padding: 8px 0;
+            border-bottom: 0.5px solid #eeeeee;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 25%;
+            color: #000000;
+        }
+
+        .value {
+            width: 75%;
+            color: #000000;
+        }
+
+        .table-spacer {
+            height: 10.5cm;
+            font-size: 1pt;
+            line-height: 1pt;
+        }
+
+        .footer-content {
+            border-top: 1px solid #cccccc;
+            padding-top: 12px;
+            font-size: 10pt;
+            color: #555555;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <table style="width: 100%; border-collapse: collapse;">
+
+        <tr>
+            <td>
+                <div class="header">
+                    <div class="title">RESERVATION VOUCHER</div>
+                    <div class="status">Status: <strong>{{ reservation.get_status_display }}</strong></div>
+                </div>
+
+                <table class="details-table">
+                    <tr>
+                        <td class="label">Reservation ID:</td>
+                        <td class="value">{{ reservation.id }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Guest name:</td>
+                        <td class="value">{{ reservation.user.name|title }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Room number:</td>
+                        <td class="value">{{ reservation.room.room_number }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Check-in date:</td>
+                        <td class="value">{{ reservation.start_date }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Check-out date:</td>
+                        <td class="value">{{ reservation.end_date }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Total price paid:</td>
+                        <td class="value">US$ {{ reservation.total_price }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Payment method:</td>
+                        <td class="value">{% if reservation.payment_method %}{{ reservation.payment_method|title }}{% else %}N/A{% endif %}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="table-spacer">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td class="footer-content">
+                Thank you for choosing our hotel! Please present this document or its ID upon check-in.
+            </td>
+        </tr>
+
+    </table>
+
+</body>
+</html>
