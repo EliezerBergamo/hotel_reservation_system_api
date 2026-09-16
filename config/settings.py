@@ -183,6 +183,13 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'config.exceptions.custom_exception_handler',
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Hotel Reservation System API',
+    'DESCRIPTION': 'API for managing hotel reservations, vouchers, and real-time notifications..',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False
+}
+
 # SimpleJWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),

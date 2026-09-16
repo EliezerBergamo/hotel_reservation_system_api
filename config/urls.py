@@ -1,7 +1,11 @@
 """
 Root URL Routing Configuration for Config Project.
 """
-
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
@@ -20,4 +24,13 @@ urlpatterns = [
     path('api/hotels/', include(('apps.hotels.urls', 'hotels'), namespace='hotels')),
     path('api/rooms/', include(('apps.rooms.urls', 'rooms'), namespace='rooms')),
     path('api/reservations/', include(('apps.reservations.urls', 'reservations'), namespace='reservations')),
+
+    # Download the OpenAPI Schema File (JSON/YAML)
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+
+    # Swagger UI Interactive Interface
+    path('api/docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+
+    # Redoc Reading Interface
+path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
